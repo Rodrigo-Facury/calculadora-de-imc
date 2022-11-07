@@ -1,6 +1,14 @@
+import { useNavigate } from "react-router-dom";
+
+
 function Calculator() {
+  const navigate = useNavigate();
+
   return (
-    <h1>Calculator</h1>
+    <main>
+      <h1>Calculadora</h1>
+      <button onClick={() => navigate('/saiba-mais')}>Saiba mais</button>
+    </main>
   );
 }
 
