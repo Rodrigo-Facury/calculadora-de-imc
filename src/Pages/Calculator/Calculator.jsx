@@ -14,13 +14,6 @@ function Calculator() {
 
   const navigate = useNavigate();
 
-  function handleChange({ target: { name, value } }) {
-    setMetrics((oldMetrics) => ({
-      ...oldMetrics,
-      [name]: value
-    }));
-  }
-
   function calculate() {
     const { height, weight } = metrics;
 
@@ -35,6 +28,17 @@ function Calculator() {
       setImc(null);
       setStatus(null);
     }
+  }
+
+  function handleChange({ target: { name, value }, key }) {
+    if (key === 'Enter') {
+      calculate();
+    }
+
+    setMetrics((oldMetrics) => ({
+      ...oldMetrics,
+      [name]: value
+    }));
   }
 
   function clear() {
@@ -75,8 +79,8 @@ function Calculator() {
           </label>
         </div>
         <div id='form-buttons-container'>
-          <button className='form-button' type='button' onClick={calculate}>Calcular</button>
           <button id='clear-button' className='form-button' type='button' onClick={clear}>Limpar</button>
+          <button className='form-button' type='button' onClick={calculate}>Calcular</button>
         </div>
       </form>
       <div id='answer-container'>
