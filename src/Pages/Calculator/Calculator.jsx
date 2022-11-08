@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Input from '../../Components/Input';
 import imcStatus from '../../utils/imcStatus';
 import './Calculator.css'
 
@@ -30,7 +31,7 @@ function Calculator() {
     }
   }
 
-  function handleChange({ target: { name, value }, key }) {
+  function handleChange({ key, target: { name, value } }) {
     if (key === 'Enter') {
       calculate();
     }
@@ -57,26 +58,12 @@ function Calculator() {
       <h1 id='calculator-title'>Calculadora de IMC</h1>
       <form id='calculator-form'>
         <div id='inputs-container'>
-          <label htmlFor='height'>
+          <Input id='height' name='height' handleChange={handleChange} >
             Altura: (ex: 1.70)
-            <input
-              className='form-input'
-              name='height'
-              id='height'
-              type='number'
-              onKeyUp={handleChange}
-            />
-          </label>
-          <label htmlFor='weight'>
+          </Input>
+          <Input id='weight' name='weight' handleChange={handleChange} >
             Peso: (ex: 69.20)
-            <input
-              className='form-input'
-              name='weight'
-              id='weight'
-              type='number'
-              onKeyUp={handleChange}
-            />
-          </label>
+          </Input>
         </div>
         <div id='form-buttons-container'>
           <button id='clear-button' className='form-button' type='button' onClick={clear}>Limpar</button>
