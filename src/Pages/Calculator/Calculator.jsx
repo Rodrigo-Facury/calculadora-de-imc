@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import imcStatus from '../../utils/imcStatus';
 import './Calculator.css'
 
 function Calculator() {
@@ -9,6 +10,7 @@ function Calculator() {
   });
 
   const [imc, setImc] = useState(null);
+  const [status, setStatus] = useState(null);
 
   const navigate = useNavigate();
 
@@ -22,9 +24,28 @@ function Calculator() {
   function calculate() {
     const { height, weight } = metrics;
 
-    const newImc = (weight / (height ** 2)).toFixed(2);
+    const newImc = Number((weight / (height ** 2)).toFixed(2));
+    const newStatus = imcStatus(newImc);
 
-    setImc(newImc);
+    if (newImc < 250 && newImc > 0) {
+      setImc(newImc);
+      setStatus(newStatus);
+
+    } else {
+      setImc(null);
+      setStatus(null);
+    }
+  }
+
+  function clear() {
+    const inputHeight = document.getElementsByClassName('form-input')[0];
+    const inputWeight = document.getElementsByClassName('form-input')[1];
+
+    inputHeight.value = '';
+    inputWeight.value = '';
+
+    setImc(null);
+    setStatus(null);
   }
 
   return (
@@ -34,17 +55,42 @@ function Calculator() {
         <div id='inputs-container'>
           <label htmlFor='height'>
             Altura: (ex: 1.70)
-            <input name='height' id='height' type='number' onKeyUp={handleChange} />
+            <input
+              className='form-input'
+              name='height'
+              id='height'
+              type='number'
+              onKeyUp={handleChange}
+            />
           </label>
           <label htmlFor='weight'>
             Peso: (ex: 69.20)
-            <input name='weight' id='weight' type='number' onKeyUp={handleChange} />
+            <input
+              className='form-input'
+              name='weight'
+              id='weight'
+              type='number'
+              onKeyUp={handleChange}
+            />
           </label>
         </div>
-        <button type='button' onClick={calculate}>Calcular</button>
+        <div id='form-buttons-container'>
+          <button className='form-button' type='button' onClick={calculate}>Calcular</button>
+          <button id='clear-button' className='form-button' type='button' onClick={clear}>Limpar</button>
+        </div>
       </form>
-      <h3><span>Seu IMC:</span> {imc}</h3>
-      <button id='redirect-button' onClick={() => navigate('/saiba-mais')}>Saiba mais</button>
+      <div id='answer-container'>
+        <h3 className='answer'><span>Seu IMC:</span> {imc}</h3>
+        <h3 id='status' className='answer'><span id='status-anchor'>Classificação:</span> {status}</h3>
+      </div>
+      <button
+        className='form-button'
+        type='button'
+        id='redirect-button'
+        onClick={() => navigate('/saiba-mais')}
+      >
+        Saiba mais
+      </button>
     </main>
   );
 }
