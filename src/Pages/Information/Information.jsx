@@ -2,7 +2,7 @@ import './Information.css'
 
 function Information() {
   return (
-    <main id='text-container'>
+    <main id='information-page'>
       <h1 id='information-title'>O que devo saber sobre IMC?</h1>
       <p>
         IMC é a sigla de Índice de Massa Corporal, um parâmetro que é utilizado para avaliar se o peso está dentro do valor ideal para a altura. 

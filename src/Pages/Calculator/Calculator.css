@@ -1,0 +1,22 @@
+#calculator-page {
+  height: 100vh;
+  justify-content: space-evenly;
+}
+
+#calculator-title {
+  justify-self: flex-start;
+}
+
+#redirect-button {
+  justify-self: flex-end;
+}
+
+#inputs-container {
+  display: flex;
+}
+
+#calculator-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
