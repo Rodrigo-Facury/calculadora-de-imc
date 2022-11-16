@@ -1,4 +1,4 @@
-export default function Input({ children, id, name, handleChange }) {
+export default function Input({ children, id, name, handleChange, defaultValue }) {
   return (
     <label htmlFor={id}>
       { children }
@@ -8,6 +8,7 @@ export default function Input({ children, id, name, handleChange }) {
         id={id}
         type='number'
         onKeyUp={handleChange}
+        defaultValue={ defaultValue !== 0 && defaultValue }
       />
     </label>
   )

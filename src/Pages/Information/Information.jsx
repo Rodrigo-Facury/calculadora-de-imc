@@ -1,6 +1,9 @@
+import { useAppSelector } from '../../store.js';
 import './Information.css'
 
 function Information() {
+  const state = useAppSelector((state) => state.imcCalculator);
+
   return (
     <main id='information-page'>
       <h1 id='information-title'>O que devo saber sobre IMC?</h1>
@@ -17,6 +20,29 @@ function Information() {
 
         O resultado de IMC é dado em kg/m2.
       </p>
+      {
+        state.imc && 
+          <p id='imc-details'>
+            No caso dos dados que você inseriu:
+
+            IMC = { state.metrics.weight } / ({ state.metrics.height } x { state.metrics.height })
+
+            <br />
+            <br />
+
+            Portanto:
+
+            <br />
+            <br />
+
+            IMC = { state.imc }
+
+            <br />
+            <br />
+
+            Este IMC é classificado como { state.status.toLowerCase() }.
+          </p>
+      }
       <h2>Por que é importante saber o IMC?</h2>
       <p>
         Saber o IMC é importante para verificar se o peso está de acordo com a altura da pessoa, além de ser importante para saber se existe risco de desenvolver alguma doença. No caso das crianças, o IMC é importante para saber se o desenvolvimento está de acordo com o esperado.
