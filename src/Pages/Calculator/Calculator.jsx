@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Input from '../../Components/Input';
-import { useAppDispatch, useAppSelector } from '../../store.js';
+import { calculateImc, changeMetrics, reset, useAppDispatch, useAppSelector } from '../../store.js';
 import imcStatus from '../../utils/imcStatus';
 import './Calculator.css';
 
@@ -18,7 +18,7 @@ function Calculator() {
     inputHeight.value = '';
     inputWeight.value = '';
 
-    dispatch({ type: 'reset' });
+    dispatch(reset());
   }
 
   function calculate() {
@@ -28,13 +28,10 @@ function Calculator() {
     const newStatus = imcStatus(newImc);
 
     if (newImc < 250 && newImc > 0) {
-      dispatch({
-        type: 'calculate',
-        payload: {
-          imc: newImc,
-          status: newStatus
-        }
-      });
+      dispatch(calculateImc({
+        imc: newImc,
+        status: newStatus
+      }));
 
     } else {
       clear();
@@ -46,10 +43,10 @@ function Calculator() {
       calculate();
     }
 
-    dispatch({ type: 'changeMetrics', payload: {
+    dispatch(changeMetrics({
       ...state.metrics,
       [name]: value
-    } });
+    }));
   }
 
   return (
