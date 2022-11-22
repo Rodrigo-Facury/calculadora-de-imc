@@ -5,7 +5,7 @@ function Information() {
   const state = useAppSelector((state) => state.imcCalculator);
 
   return (
-    <main id='information-page'>
+    <main id='information-page' data-testid='information-page'>
       <h1 id='information-title'>O que devo saber sobre IMC?</h1>
       <p>
         IMC é a sigla de Índice de Massa Corporal, um parâmetro que é utilizado para avaliar se o peso está dentro do valor ideal para a altura. 
