@@ -11,7 +11,7 @@ const initialState = {
   }
 }
 
-const slice = createSlice({
+export const slice = createSlice({
   name: 'imcReducer',
   initialState,
   reducers: {
