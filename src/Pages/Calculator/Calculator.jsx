@@ -7,7 +7,6 @@ import './Calculator.css';
 function Calculator() {
   const state = useAppSelector((state) => state.imcCalculator);
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
 
   function clear() {
@@ -23,11 +22,14 @@ function Calculator() {
   async function calculate() {
     const { height, weight } = state.metrics;
 
-    const { imc: newImc, imcStatus: newStatus } = await fetch(`http://localhost:3001/calculate?${new URLSearchParams({
+    const apiAnswer = await fetch('http://localhost:3001/calculate?' + new URLSearchParams({
       height,
       weight,
-    })}`)
-      .then((res) => res.json());
+    }));
+
+    const parsedAnswer = await apiAnswer.json();
+
+    const { imc: newImc, imcStatus: newStatus }  = parsedAnswer;
 
     if (newImc < 250 && newImc > 0) {
       dispatch(calculateImc({
@@ -59,7 +61,7 @@ function Calculator() {
           <Input dataTestid='height' id='height' name='height' handleChange={handleChange} defaultValue={ state.metrics.height } >
             Altura: (ex: 1.70)
           </Input>
-          <Input id='weight' name='weight' handleChange={handleChange} defaultValue={ state.metrics.weight } >
+          <Input dataTestid='weight' id='weight' name='weight' handleChange={handleChange} defaultValue={ state.metrics.weight } >
             Peso: (ex: 69.20)
           </Input>
         </div>
@@ -69,8 +71,23 @@ function Calculator() {
         </div>
       </form>
       <div id='answer-container'>
-        <h3 className='complete-answer'><span className='answer-anchor'>IMC:</span> <span data-testid='answer-imc'>{state.imc}</span></h3>
-        <h3 id='status' className='complete-answer'><span className='answer-anchor' id='status-anchor'>Classificação:</span> <span data-testid='answer-status'>{state.status}</span></h3>
+        <h3 className='complete-answer'>
+          <span className='answer-anchor'>
+            IMC:
+          </span> {state.imc && <span data-testid='answer-imc'>
+            {state.imc}
+          </span>}
+        </h3>
+        <h3
+          id='status'
+          className='complete-answer'
+        >
+          <span className='answer-anchor' id='status-anchor'>
+            Classificação:
+          </span> {state.status && <span data-testid='answer-status'>
+            {state.status}
+          </span>}
+        </h3>
       </div>
       <button
         className='form-button'
