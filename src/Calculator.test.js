@@ -40,11 +40,11 @@ describe('Test usage of Calculator page', () => {
 
   // Terceira forma
 
-  // beforeEach(() => {
-  //   global.fetch = jest.fn(async () => ({
-  //     json: async () => ({ imc: expectedImc, imcStatus: expectedImcStatus })
-  //   }));
-  // });
+  beforeEach(() => {
+    global.fetch = jest.fn(async () => ({
+      json: async () => ({ imc: expectedImc, imcStatus: expectedImcStatus })
+    }));
+  });
 
   it('Should clear inputs when clear button is clicked', async () => {
     renderWithProvider(<Calculator />);
