@@ -33,10 +33,3 @@ label {
 form {
   display: flex;
 }
-
-span {
-  padding: 8px;
-  background-color: #0EA195;
-  color: #F2F2F2;
-  border-radius: 20px;
-}

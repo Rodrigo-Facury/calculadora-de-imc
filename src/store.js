@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 
 const initialState = {
@@ -11,37 +11,32 @@ const initialState = {
   }
 }
 
-function imcReducer(state = initialState, action) {
-  switch(action.type) {
-    case 'changeMetrics':
-      const metrics = action.payload;
-      return {
-        ...state,
-        metrics
-      }
+export const slice = createSlice({
+  name: 'imcReducer',
+  initialState,
+  reducers: {
+    changeMetrics: (state, action) => {
+      state.metrics = action.payload;
+    },
+    calculateImc: (state, action) => {
+      const { imc, status } = action.payload
 
-    case 'calculate':
-      const { imc, status } = action.payload;
-
-      return {
-        ...state,
-        imc,
-        status
-      }
-
-    case 'reset':
-      return initialState;
-    
-    default:
-      return initialState;
+      state.imc = imc;
+      state.status = status;
+    },
+    reset: (state) => {
+      return initialState; 
+    }
   }
-}
+});
 
 export const store = configureStore({
   reducer: {
-    imcCalculator: imcReducer
+    imcCalculator: slice.reducer
   }
 });
+
+export const { changeMetrics, calculateImc, reset } = slice.actions;
 
 export const useAppDispatch = () => useDispatch();
 

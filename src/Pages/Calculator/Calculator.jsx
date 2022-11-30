@@ -1,14 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import Input from '../../Components/Input';
-import { useAppDispatch, useAppSelector } from '../../store.js';
-import imcStatus from '../../utils/imcStatus';
+import { calculateImc, changeMetrics, reset, useAppDispatch, useAppSelector } from '../../store.js';
 import './Calculator.css';
 
 
 function Calculator() {
   const state = useAppSelector((state) => state.imcCalculator);
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
 
   function clear() {
@@ -18,23 +16,26 @@ function Calculator() {
     inputHeight.value = '';
     inputWeight.value = '';
 
-    dispatch({ type: 'reset' });
+    dispatch(reset());
   }
 
-  function calculate() {
+  async function calculate() {
     const { height, weight } = state.metrics;
 
-    const newImc = Number((weight / (height ** 2)).toFixed(2));
-    const newStatus = imcStatus(newImc);
+    const apiAnswer = await fetch('http://localhost:3001/calculate?' + new URLSearchParams({
+      height,
+      weight,
+    }));
+
+    const parsedAnswer = await apiAnswer.json();
+
+    const { imc: newImc, imcStatus: newStatus }  = parsedAnswer;
 
     if (newImc < 250 && newImc > 0) {
-      dispatch({
-        type: 'calculate',
-        payload: {
-          imc: newImc,
-          status: newStatus
-        }
-      });
+      dispatch(calculateImc({
+        imc: newImc,
+        status: newStatus
+      }));
 
     } else {
       clear();
@@ -46,21 +47,21 @@ function Calculator() {
       calculate();
     }
 
-    dispatch({ type: 'changeMetrics', payload: {
+    dispatch(changeMetrics({
       ...state.metrics,
       [name]: value
-    } });
+    }));
   }
 
   return (
-    <main id='calculator-page'>
+    <main id='calculator-page' data-testid='calculator-page'>
       <h1 id='calculator-title'>Calculadora de IMC</h1>
       <form id='calculator-form'>
         <div id='inputs-container'>
-          <Input id='height' name='height' handleChange={handleChange} defaultValue={ state.metrics.height } >
+          <Input dataTestid='height' id='height' name='height' handleChange={handleChange} defaultValue={ state.metrics.height } >
             Altura: (ex: 1.70)
           </Input>
-          <Input id='weight' name='weight' handleChange={handleChange} defaultValue={ state.metrics.weight } >
+          <Input dataTestid='weight' id='weight' name='weight' handleChange={handleChange} defaultValue={ state.metrics.weight } >
             Peso: (ex: 69.20)
           </Input>
         </div>
@@ -70,8 +71,23 @@ function Calculator() {
         </div>
       </form>
       <div id='answer-container'>
-        <h3 className='answer'><span>IMC:</span> {state.imc}</h3>
-        <h3 id='status' className='answer'><span id='status-anchor'>Classificação:</span> {state.status}</h3>
+        <h3 className='complete-answer'>
+          <span className='answer-anchor'>
+            IMC:
+          </span> {state.imc && <span data-testid='answer-imc'>
+            {state.imc}
+          </span>}
+        </h3>
+        <h3
+          id='status'
+          className='complete-answer'
+        >
+          <span className='answer-anchor' id='status-anchor'>
+            Classificação:
+          </span> {state.status && <span data-testid='answer-status'>
+            {state.status}
+          </span>}
+        </h3>
       </div>
       <button
         className='form-button'
